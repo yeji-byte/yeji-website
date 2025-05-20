@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweetfit - 당신만을 위한 맞춤 디저트</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <h1>Sweetfit</h1>
+        <p>오로지 당신만을 위한 맞춤 디저트를 추천해드립니다!</p>
+    </header>
+
+    <section class="recommendation">
+        <h2>오늘은 어떤 디저트가 땡기시나요?</h2>
+        <form id="filterForm">
+            <label for="calories">칼로리 (kcal 이하):</label>
+            <input type="number" id="calories" name="calories" min="0" />
+
+            <p>
+                <label for="sugar">당 함유량 (g 이하):</label>
+                <input type="number" id="sugar" name="sugar" min="0" />
+            </p>
+            <label for="typeSelect">디저트 종류:</label>
+            <select id="typeSelect" name="type">
+                <option value="">-- 선택하세요 --</option>
+                <option value="케이크">케이크</option>
+                <option value="쿠키">쿠키</option>
+                <option value="타르트">타르트</option>
+                <option value="빵">빵</option>
+                <option value="와플">와플</option>
+            </select>
+            <fieldset>
+                <legend>디저트 종류:</legend>
+                <label><input type="checkbox" name="type" value="비건" /> 비건</label>
+                <label><input type="checkbox" name="type" value="글루텐프리" /> 글루텐프리</label>
+                <label><input type="checkbox" name="type" value="타르트" /> 타르트</label>
+                <label><input type="checkbox" name="type" value="빵" /> 빵</label>
+                <label><input type="checkbox" name="type" value="와플" /> 와플</label>
+            </fieldset>
+
+            <button type="submit">검색</button>
+        </form>
+
+        <div id="results"></div>
+    </section>
+
+    <section class="diary">
+        <h2>나만의 디저트 기록일기</h2>
+        <form id="diaryForm">
+            <label for="diaryDessert">달콤하게 남겨보세요!</label>
+            <p> <textarea id="diaryComment" name="diaryComment" rows="5" required></textarea></p>
+
+            <button type="submit">저장</button>
+        </form>
+
+        <div id="diaryEntries"></div>
+    </section>
+
+    <script src="script.js"></script>
+
+
+</body>
