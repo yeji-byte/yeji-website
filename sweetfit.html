@@ -3,66 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sweetfit - 디저트 추천</title>
+  <title>디저트 메인 페이지</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
     .section { margin-bottom: 40px; }
     .graph-container { width: 600px; height: 400px; margin: auto; }
     button { padding: 10px 20px; font-size: 16px; margin: 10px; cursor: pointer; }
-    #recommendationPage, #diaryPage, #newsPage { display: none; }
-    .result-image { max-width: 300px; margin-top: 20px; }
-    .news-item { margin-bottom: 30px; text-align: left; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
-    .news-item img { max-width: 100%; height: auto; border-radius: 8px; }
+    #recommendationPage, #diaryPage { display: none; }
+    #dessertImage, .result-image { max-width: 300px; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>Sweetfit - 당신만을 위한 디저트</h1>
+  <h1>Sweetfit - 당신만을 위한 디저트 </h1>
   <button onclick="showPage('recommendationPage')">맞춤형 디저트 추천받기</button>
   <button onclick="showPage('diaryPage')">나만의 디저트 일기</button>
-  <button onclick="showPage('newsPage')">오늘의 디저트 뉴스</button>
 
-  <!-- 추천 페이지 -->
   <div id="recommendationPage">
     <h2>오늘은 어떤 디저트가 땡기시나요?</h2>
     <div class="section">
-      <h3>디저트 선택</h3>
+      <h3>종류</h3>
       <label><input type="radio" name="dessert" value="케이크"> 케이크</label>
       <label><input type="radio" name="dessert" value="도넛"> 도넛</label>
       <label><input type="radio" name="dessert" value="쿠키"> 쿠키</label>
+ 
     </div>
 
     <div class="section">
-      <h3>옵션 선택 (하나만 선택)</h3>
-      <label><input type="radio" name="option" value="비건"> 비건</label>
+      <h3>옵션</h3>
+     <label><input type="radio" name="option" value="비건"> 비건</label>
       <label><input type="radio" name="option" value="저당"> 저당</label>
       <label><input type="radio" name="option" value="글루텐프리"> 글루텐프리</label>
     </div>
 
+
     <div class="section">
-      <h3>칼로리 / 당 수치</h3>
+      <h3>칼로리 / 당</h3>
       <select id="calorieRange">
-        <option value="1-200">1~200</option>
+        <option value="1-00">1~200</option>
         <option value="201-400">201~400</option>
       </select>
       <select id="sugarRange">
-        <option value="0-10">0~10g</option>
+        <option value="1-10">1~10g</option>
         <option value="11-20">11~20g</option>
       </select>
-      <br><br>
       <button onclick="searchDesserts()">검색</button>
       <div id="result"></div>
     </div>
   </div>
 
-  <!-- 일기 페이지 -->
   <div id="diaryPage">
     <h2>나만의 디저트 일기</h2>
     <p>자유롭게 기록해보세요!</p>
-    <textarea id="diary" rows="5" cols="60" placeholder="예: 딸기 케이크가 퐁신하고 부드러웠다."></textarea><br><br>
-    <input type="file" id="imageUpload" accept="image/*">
-    <input type="number" id="calorieInput" placeholder="오늘 섭취한 당 (g)"><br><br>
-    <button onclick="saveDiary()">저장</button>
+    <textarea id="diary" rows="5" cols="60" placeholder="예: 딸기 케이크크가 퐁신했음."></textarea><br><br>
+    <input type="file" id="imageUpload" accept="image/*"><br><br>
+    <input type="number" id="calorieInput" placeholder="당 수치 입력 (g)"><br><br>
+    <button onclick="saveDiary()"> 저장</button>
 
     <div class="section graph-container">
       <h3>내 몸은 내가 지킨당</h3>
@@ -71,87 +67,9 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      showPage('recommendationPage');
-    });
-
-    function showPage(pageId) {
-      const pages = ['recommendationPage', 'diaryPage', 'newsPage'];
-      pages.forEach(id => document.getElementById(id).style.display = 'none');
-      document.getElementById(pageId).style.display = 'block';
-    }
-
-    function saveDiary() {
-      const sugar = parseFloat(document.getElementById('calorieInput').value);
-      if (!isNaN(sugar)) {
-        const clamped = Math.min(Math.max(sugar, 0), 25);
-        if (!window.chart) {
-          const ctx = document.getElementById('calorieChart').getContext('2d');
-          window.chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-              labels: ['섭취한 당', '남은 당'],
-              datasets: [{
-                data: [clamped, 25 - clamped],
-                backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(200, 200, 200, 0.3)'],
-                borderColor: 'rgba(255, 255, 255, 1)',
-                borderWidth: 1
-              }]
-            },
-            options: {
-              responsive: true,
-              plugins: {
-                legend: { position: 'bottom' },
-                title: { display: true, text: '하루 권장 당 섭취량 (기준: 25g)' }
-              }
-            }
-          });
-        } else {
-          window.chart.data.datasets[0].data = [clamped, 25 - clamped];
-          window.chart.update();
-        }
-      }
-      alert('기록이 저장되었습니다!');
-    }
-
-    function searchDesserts() {
-      const dessertType = document.querySelector('input[name="dessert"]:checked');
-      const option = document.querySelector('input[name="option"]:checked');
-      const calorieRange = document.getElementById('calorieRange').value.split('-');
-      const sugarRange = document.getElementById('sugarRange').value.split('-');
-
-      if (!dessertType || !option) {
-        alert("디저트와 옵션을 모두 선택해주세요.");
-        return;
-      }
-
-      const results = dessertDB.filter(d =>
-        d.type === dessertType.value &&
-        d.options.includes(option.value) &&
-        d.calorie >= Number(calorieRange[0]) && d.calorie <= Number(calorieRange[1]) &&
-        d.sugar >= Number(sugarRange[0]) && d.sugar <= Number(sugarRange[1])
-      );
-
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = '';
-
-      if (results.length === 0) {
-        resultDiv.innerHTML = `<p>조건에 맞는 디저트가 없습니다.</p>`;
-      } else {
-        results.forEach(dessert => {
-          resultDiv.innerHTML += `
-            <div>
-              <h4>${dessert.name}</h4>
-              <p>칼로리: ${dessert.calorie}kcal / 당: ${dessert.sugar}g</p>
-              <p>위치: ${dessert.location}</p>
-              <img class="result-image" src="${dessert.image}" alt="${dessert.name}">
-            </div><hr>`;
-        });
-      }
-    }
+    let chart;
 
     const dessertDB = [
-      // 간결하게 예시만 넣고, 전체 목록은 필요시 다시 확장 가능
       {
         name: '저당 요거트 도넛',
         type: '도넛',
@@ -331,31 +249,86 @@
  image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MDZfMjA0%2FMDAxNzE0OTU5NTc2MzE5.beXToJQ7UcucjfchKsQ91CGWx0BF0GyD1FXBczw40xwg.gFfCVJW1SfhWN-1-86MUVKCglX0FMuiiAH0cpuh__gMg.JPEG%2FIMG_2455.JPG&type=a340'
    }
     ];
-     <div id="news" class="hidden">
-      <h1>디저트 뉴스</h1>
+    function showPage(pageId) {
+      document.getElementById('recommendationPage').style.display = 'none';
+      document.getElementById('diaryPage').style.display = 'none';
+      document.getElementById(pageId).style.display = 'block';
+      if (pageId === 'diaryPage' && !chart) {
+        const ctx = document.getElementById('calorieChart').getContext('2d');
+        chart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['섭취한 당', '남은 당'],
+            datasets: [{
+              data: [0, 25],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(200, 200, 200, 0.3)'
+              ],
+              borderColor: 'rgba(255, 255, 255, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'bottom' },
+              title: {
+                display: true,
+                text: '하루 권장 당 섭취량 (기준: 25g)'
+              }
+            }
+          }
+        });
+      }
+    }
 
-      <div class="news-item">
-        <h2>신상 마카롱 출시!</h2>
-        <p>달콤한 신상 마카롱이 출시되었습니다. 다양한 맛을 즐겨보세요.</p>
-        <small>2025-05-28</small>
-      </div>
+    function parseRange(rangeStr) {
+      const [min, max] = rangeStr.split('-').map(Number);
+      return { min, max };
+    }
 
-      <div class="news-item">
-        <h2>여름 한정 아이스크림 이벤트</h2>
-        <p>여름을 맞아 한정 아이스크림 이벤트를 진행합니다. 시원한 디저트를 만나보세요.</p>
-        <small>2025-05-27</small>
-      </div>
-    </div>
-  </div>
+    function searchDesserts() {
+      const dessert = document.querySelector('input[name="dessert"]:checked')?.value;
+      const options = [...document.querySelectorAll('input[name="option"]:checked')].map(cb => cb.value);
+      const calorieRange = parseRange(document.getElementById('calorieRange').value);
+      const sugarRange = parseRange(document.getElementById('sugarRange').value);
 
-  <script>
-    function showPage(page) {
-      document.getElementById('home').classList.add('hidden');
-      document.getElementById('news').classList.add('hidden');
-      document.getElementById(page).classList.remove('hidden');
+      const resultDiv = document.getElementById('result');
+
+      const filtered = dessertDB.filter(item => {
+        return (
+          (!dessert || item.type === dessert) &&
+          options.every(opt => item.options.includes(opt)) &&
+          item.calorie >= calorieRange.min && item.calorie <= calorieRange.max &&
+          item.sugar >= sugarRange.min && item.sugar <= sugarRange.max
+        );
+      });
+
+      if (filtered.length > 0) {
+        const result = filtered[0];
+        resultDiv.innerHTML = `
+          <h4>추천 디저트: ${result.name}</h4>
+          <p>위치: ${result.location}</p>
+          <p>칼로리: ${result.calorie} kcal / 당: ${result.sugar}g</p>
+          <img class="result-image" src="${result.image}" alt="${result.name} 이미지">
+        `;
+      } else {
+        resultDiv.innerHTML = '<p>조건에 맞는 디저트를 찾을 수 없습니다.</p>';
+      }
+    }
+
+    function saveDiary() {
+      const sugar = parseFloat(document.getElementById('calorieInput').value);
+      if (!isNaN(sugar)) {
+        const clamped = Math.min(Math.max(sugar, 0), 25);
+        if (chart) {
+          chart.data.datasets[0].data = [clamped, 25 - clamped];
+          chart.update();
+        }
+      }
+      alert('기록이 저장되었습니다!');
     }
   </script>
-
 </body>
 </html>
-
