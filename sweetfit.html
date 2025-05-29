@@ -12,12 +12,37 @@
     button { padding: 10px 20px; font-size: 16px; margin: 10px; cursor: pointer; }
     #recommendationPage, #diaryPage { display: none; }
     #dessertImage, .result-image { max-width: 300px; margin-top: 20px; }
+    
+     .news-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .news-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      width: 250px;
+      text-align: left;
+    }
+
+    .news-card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .news-card h4 {
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>Sweetfit - 당신만을 위한 디저트 </h1>
   <button onclick="showPage('recommendationPage')">맞춤형 디저트 추천받기</button>
   <button onclick="showPage('diaryPage')">나만의 디저트 일기</button>
+  <button onclick="showPage('newsPage')">오늘의 디저트 뉴스</button>
 
   <div id="recommendationPage">
     <h2>오늘은 어떤 디저트가 땡기시나요?</h2>
@@ -65,7 +90,28 @@
       <canvas id="calorieChart"></canvas>
     </div>
   </div>
-
+  
+   <div id="newsPage">
+    <h2>다양한 디저트 소식을 한눈에!</h2>
+    <p></p>
+    <div class="news-container">
+      <div class="news-card">
+        <img src="https://cdn.imweb.me/upload/S20220503731b0c0f96068/2aa143ef38303.jpg" alt="신상 마카롱">
+        <h4>[새 출시] 무지개 마카롱</h4>
+        <p>컬러풀한 비주얼과 다양한 맛으로 SNS 인기 폭발!</p>
+      </div>
+      <div class="news-card">
+        <img src="https://image.ohou.se/i/bucketplace-v2-development/uploads/cards/projects/166799632540277368.jpeg" alt="로컬 디저트 카페">
+        <h4>[이슈] 부산 로컬 디저트 카페 열풍</h4>
+        <p>지역 기반의 디저트 맛집이 주목받고 있어요.</p>
+      </div>
+      <div class="news-card">
+        <img src="https://img-cf.kurly.com/shop/data/goods/1656644979364l0.jpg" alt="비건 디저트">
+        <h4>[트렌드] 비건 디저트 시장 확대</h4>
+        <p>건강과 환경을 생각한 비건 디저트 인기 상승 중.</p>
+      </div>
+    </div>
+  </div> 
   <script>
     let chart;
 
@@ -223,7 +269,7 @@
  location: '찐이네 쿠키집', 
  image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fshop1.phinf.naver.net%2F20230424_259%2F1682312063126HP7M4_JPEG%2F1251742802899559_352993240.jpg&type=a340'
    },
-{ name: '마카다미아 쿠키', 
+{ name: '비건 마카다미아 쿠키', 
  type: '쿠키', 
  options: ['비건'], 
  calorie: 52, 
@@ -231,7 +277,7 @@
  location: '찐이네 쿠키집', 
  image: 'https://search.pstatic.net/common/?src=https%3A%2F%2Fshop-phinf.pstatic.net%2F20250225_87%2F1740468799150C7oa5_JPEG%2F88137623946670553_1771657184.jpg&type=a340' 
    },
-{ name: '로투스 스모어 쿠키', 
+{ name: '비건 로투스 스모어 쿠키', 
  type: '쿠키', 
  options: ['비건'], 
  calorie: 156, 
@@ -368,6 +414,8 @@
  image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MDZfMjA0%2FMDAxNzE0OTU5NTc2MzE5.beXToJQ7UcucjfchKsQ91CGWx0BF0GyD1FXBczw40xwg.gFfCVJW1SfhWN-1-86MUVKCglX0FMuiiAH0cpuh__gMg.JPEG%2FIMG_2455.JPG&type=a340'
    }
     ];
+   
+
     function showPage(pageId) {
       document.getElementById('recommendationPage').style.display = 'none';
       document.getElementById('diaryPage').style.display = 'none';
