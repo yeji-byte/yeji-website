@@ -70,22 +70,15 @@
     </div>
   </div>
 
-
-
   <script>
-    // 초기 페이지 설정
     document.addEventListener('DOMContentLoaded', () => {
       showPage('recommendationPage');
     });
 
     function showPage(pageId) {
       const pages = ['recommendationPage', 'diaryPage', 'newsPage'];
-      pages.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-      });
-      const target = document.getElementById(pageId);
-      if (target) target.style.display = 'block';
+      pages.forEach(id => document.getElementById(id).style.display = 'none');
+      document.getElementById(pageId).style.display = 'block';
     }
 
     function saveDiary() {
@@ -109,10 +102,7 @@
               responsive: true,
               plugins: {
                 legend: { position: 'bottom' },
-                title: {
-                  display: true,
-                  text: '하루 권장 당 섭취량 (기준: 25g)'
-                }
+                title: { display: true, text: '하루 권장 당 섭취량 (기준: 25g)' }
               }
             }
           });
@@ -135,13 +125,11 @@
         return;
       }
 
-      const results = dessertDB.filter(d => 
+      const results = dessertDB.filter(d =>
         d.type === dessertType.value &&
         d.options.includes(option.value) &&
-        d.calorie >= Number(calorieRange[0]) &&
-        d.calorie <= Number(calorieRange[1]) &&
-        d.sugar >= Number(sugarRange[0]) &&
-        d.sugar <= Number(sugarRange[1])
+        d.calorie >= Number(calorieRange[0]) && d.calorie <= Number(calorieRange[1]) &&
+        d.sugar >= Number(sugarRange[0]) && d.sugar <= Number(sugarRange[1])
       );
 
       const resultDiv = document.getElementById('result');
@@ -162,7 +150,8 @@
       }
     }
 
-     const dessertDB = [
+    const dessertDB = [
+      // 간결하게 예시만 넣고, 전체 목록은 필요시 다시 확장 가능
       {
         name: '저당 요거트 도넛',
         type: '도넛',
@@ -181,104 +170,13 @@
         location: '플랜트',
         image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA5MjRfNzQg%2FIMG_1468.JPG&type=a340'
       },
-      {
-        name: '글루텐프리 레몬크림 도넛',
-        type: '도넛',
-        options: ['글루텐프리'],
-        calorie: 387,
-        sugar: 15,
-        location: '예지진베이커리',
-        image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2FMjAyMDA0MDJfMTY1%2F20200402_174402.jpg&type=a340'
-      },
-{ 
-  name: '저당 쿠앤크 도넛', 
-  type: '도넛', 
-  options: ['저당'], 
-  calorie: 135, 
-  sugar: 5, 
-  location: '혜1베이커리', 
-  image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxNzA5MjFfMjIz%2FMDAxNTA1OTU5OTg0NjY4.Far5HtwXnRkMuTxDINSQV7kwHaX-5MyycqJUMIFbD5gg.ke24X1vv_LvnKJss5vg_J4iOte1z-8tu450YeO0aDW8g.PNG.skhw967%2F2017912152210_35941.png&type=a340' 
-},
-
-{ name: '저당 글레이즈드 도넛', 
- type: '도넛', 
- options: ['저당'], 
- calorie: 275, 
- sugar: 19, location: '혜1베이커리',
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTAxMTVfOTQg%2FMDAxNzM2OTA4NzI2ODM0.2u8HdOEzdyeIZYLKEKJB5PfV7uGKens0YzYTLoEyZ6kg.brN7DtFEyyDhz88lYa1LrJ4vB-t6sl8vZb5kmlSZIgIg.JPEG%2FIMG_9226.jpg&type=a340' 
-   },
-{ name: '글루텐프리 레몬크림도넛', 
- type: '도넛', 
- options: ['글루텐프리'], 
- calorie: 387, 
- sugar: 15, 
- location: '예지진베이커리', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2FMjAyMDA0MDJfMTY1%2FMDAxNTg1ODE3NTU4ODcy.8biEkAoNsevxKDmlhXcTmOBkO112Gamv4C6pQKRoFagg.pPraY8SlyIzyiDzmY30Jq4OB38HZbnVUMwNrSjpLyiUg.JPEG%2F20200402_174402.jpg&type=a340' 
-   },
-{ name: '글루텐프리 다크초코 도넛', 
- type: '도넛', 
- options: ['글루텐프리'], 
- calorie: 124, 
- sugar: 15, 
- location: '은쩡베이커리',
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjEwMjJfMzAg%2FMDAxNjY2NDMxMTEwMjk0.wTM96-LAxqyZwsLks32Y4phh9ANUGwP0eWJ2vrNA4Cwg.uTHUOihqwpzp69jbQhTXpmmtEOTge7qPWdHfikSGJ6Eg.JPEG.haerime2%2F1666430857363.jpg&type=a340' 
-   },
-{ name: '글루텐프리 다크초코 도넛', 
- type: '도넛', 
- options: ['글루텐프리'], 
- calorie: 277,
- sugar: 6, 
- location: '은쩡베이커리', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjEwMjJfMzAg%2FMDAxNjY2NDMxMTEwMjk0.wTM96-LAxqyZwsLks32Y4phh9ANUGwP0eWJ2vrNA4Cwg.uTHUOihqwpzp69jbQhTXpmmtEOTge7qPWdHfikSGJ6Eg.JPEG.haerime2%2F1666430857363.jpg&type=a340' 
-   },
-
-
-{ name: '비건 라즈베리 도넛',
- type: '도넛', 
- options: ['비건'], 
- calorie: 257, sugar: 2, 
- location: '쩡쩡베이커리', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzEyMDJfMTk1%2FMDAxNzAxNDkzMzc0MTI4.obkNEixuRUoFxDg3IDCBYZXDM39G6yh9A8dAFMI9C6kg.mZkiCyv3StGQygzdPlXt1DKMLT69zTk44QhALSHcf38g.JPEG.pjo125419%2FKakaoTalk_20231202_131522074_11.jpg&type=sc960_832’
-   },
-{ name: '비건 캬라멜 도넛',
-  type: '도넛', 
- options: ['비건'], 
- calorie: 299, 
- sugar: 19, 
- location: '혜혜베이커리', 
- image: ‘https://search.pstatic.net/sunny/?src=https%3A%2F%2Fmedia.istockphoto.com%2Fid%2F1143279587%2Fko%2F%25EC%2582%25AC%25EC%25A7%2584%2F%25EC%25B9%25B4%25EB%259D%25BC%25EB%25A9%259C-%25EA%25B2%25B0%25EB%25B9%2599-%25EB%25B0%258F-%25EC%259B%25A8%25EC%259D%25B4%25ED%258D%25BC-%25EB%25B6%2580%25EC%258A%25A4%25EB%259F%25AC%25EA%25B8%25B0%25EC%2599%2580-%25EB%258F%2584%25EB%2584%259B.jpg%3Fs%3D612x612%26w%3Dis%26k%3D20%26c%3DBNxMUcxhHgr-kIFO_o-iBvlStMIyrQwhgSII1XVmvVs%3D&type=a340’
-   },
-{ name: '비건 피넛크림 도넛', 
- type: '도넛', 
- options: ['비건'], 
- calorie: 59, 
- sugar: 1.8, 
- location: '혜혜베이커리', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxODAyMTNfMTU3%2FMDAxNTE4NDk4ODkyNjg1.LIsr8jcVtAJISKNLseddFARUaEzFU_JRnIwwYYn1lrEg.sPyEjCGkvbpl7_SdI2HLvis8lKad-jdjHFBJuDl6J0kg.JPEG.fkffkffkxhdxhd%2FKakaoTalk_Moim_73Sk6iCtC8TJ9u7eM82uFabnDahbKG.jpg&type=a340’
-   },
-{ name: '비건 민트초코 도넛', 
- type: '도넛', 
- options: ['비건'], 
- calorie: 99, 
- sugar: 18, 
- location: '예찐도나츠', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTEwMjJfNjgg%2FMDAxNjM0ODY3MDk3MDI4.9tsybfU0iQkQMDFqPmrQxGjQ9BB_BkPypi16kboHpf4g.xT7rnaBCKvWbSTT732KBUrHhpbMsbW8tx15e2Kph8cog.JPEG.kelly92256%2FIMG_4749.jpg&type=a340’
-   },
-{ name: '비건 초코 케이크', 
- type: '케이크', 
- options: ['비건'], 
- calorie: 180, 
- sugar: 8, 
- location: '플랜트', 
- image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA5MjRfNzQg%2FMDAxNjY0MDE2MTE0Mjkz.ZwtfiOLO09l8nci_VrTu3ZT0udLThwLKdRLwKpN-MLkg.zxighzHCQgpslbmA-l6bdrEvuNl1UTnJht294CQU2MEg.JPEG.snue3103%2F20220924%25A3%25DF184330.jpg&type=sc960_832' 
-},
-{ name: '비건 딸기 케이크',
+     { name: '비건 딸기 케이크',
  type: '케이크', 
  options: ['비건'], 
  calorie: 145, 
  sugar: 18, 
  location: '쩡케잌', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTAyMjRfMjIx%2FMDAxNzQwMzYwNTA1NzQx.slg0bdZ_sSxbDjKDwvDuk0RdbvE-WVq0p_SOjlbzC7Ag.zpthDz-n-HzH331cjrrnxHXG7weYw0snsyNl_6V9YSMg.JPEG%2Foutput_3857968872.jpg&type=a340' 
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTAyMjRfMjIx%2FMDAxNzQwMzYwNTA1NzQx.slg0bdZ_sSxbDjKDwvDuk0RdbvE-WVq0p_SOjlbzC7Ag.zpthDz-n-HzH331cjrrnxHXG7weYw0snsyNl_6V9YSMg.JPEG%2Foutput_3857968872.jpg&type=a340' 
    },
   { name: '비건 레드벨벳 케이크', 
     type: '케이크', 
@@ -286,7 +184,7 @@
    calorie: 253, 
    sugar: 14, 
    location: '쩡케잌', 
-   image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA0MDZfMjA3%2FMDAxNzEyMzkwNDM1MjYx.pahvKV6uSiABCKpwMqZnu0mVprXlww6FoO9owWoiJrcg.fzaHSfDE7rvYQPdtdc8wxdZh3nIVpYwcF-tvHVZqfAMg.JPEG%2FIMG_1468.JPG&type=a340' 
+   image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA0MDZfMjA3%2FMDAxNzEyMzkwNDM1MjYx.pahvKV6uSiABCKpwMqZnu0mVprXlww6FoO9owWoiJrcg.fzaHSfDE7rvYQPdtdc8wxdZh3nIVpYwcF-tvHVZqfAMg.JPEG%2FIMG_1468.JPG&type=a340' 
      },
 { name: '비건 쑥크림 케이크', 
  type: '케이크', 
@@ -294,7 +192,7 @@
  calorie: 333, 
  sugar: 3.9, 
  location: '케이쿠쿠', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblog_2025_03_14_3318%2FMJZhNTZe8c_01.jpg&type=a340' 
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fimage.nmv.naver.net%2Fblog_2025_03_14_3318%2FMJZhNTZe8c_01.jpg&type=a340' 
    },
  { name: '비건 오트밀 쿠키', 
    type: '쿠키', 
@@ -310,7 +208,7 @@
  calorie: 202, 
  sugar: 15, 
  location: '찐이네 쿠키집', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fshop1.phinf.naver.net%2F20230424_259%2F1682312063126HP7M4_JPEG%2F1251742802899559_352993240.jpg&type=a340'
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fshop1.phinf.naver.net%2F20230424_259%2F1682312063126HP7M4_JPEG%2F1251742802899559_352993240.jpg&type=a340'
    },
 { name: '비건 마카다미아 쿠키', 
  type: '쿠키', 
@@ -318,7 +216,7 @@
  calorie: 52, 
  sugar: 9, 
  location: '찐이네 쿠키집', 
- image: ‘https://search.pstatic.net/common/?src=https%3A%2F%2Fshop-phinf.pstatic.net%2F20250225_87%2F1740468799150C7oa5_JPEG%2F88137623946670553_1771657184.jpg&type=a340' 
+ image: 'https://search.pstatic.net/common/?src=https%3A%2F%2Fshop-phinf.pstatic.net%2F20250225_87%2F1740468799150C7oa5_JPEG%2F88137623946670553_1771657184.jpg&type=a340' 
    },
 { name: '비건 로투스 스모어 쿠키', 
  type: '쿠키', 
@@ -326,7 +224,7 @@
  calorie: 156, 
  sugar: 17, 
  location: '예지 과자상점', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAyMjFfNzIg%2FMDAxNjc2OTg0MzQ5NDg2.yFA0nNUoNdzkzecwNu_-TrkcsoXdGEE4N2mHNngoNDsg.d7opnjdZ6L0uxz_jIqy78BLJ45mMpPBm64lFmj2MHLsg.JPEG.dmswl65746%2FIMG_7275.JPG&type=a340'
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAyMjFfNzIg%2FMDAxNjc2OTg0MzQ5NDg2.yFA0nNUoNdzkzecwNu_-TrkcsoXdGEE4N2mHNngoNDsg.d7opnjdZ6L0uxz_jIqy78BLJ45mMpPBm64lFmj2MHLsg.JPEG.dmswl65746%2FIMG_7275.JPG&type=a340'
    },
 { name: '초코칩 피칸 쿠키', 
  type: '쿠키', 
@@ -342,7 +240,7 @@
  calorie: 290, 
  sugar: 16, 
  location: '실버정과자상점', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA2MTlfMjUx%2FMDAxNjI0MDcwMDQ2NDE0.bQqjuSquWZRxFSaiU6fNy0y0yFHn00xskCxv2olrrOAg.wm74c7Cp_PQD0pJ5vYUWaGbzczPoqsUjsAgU2isaHkkg.JPEG.s2lette%2FIMG_6753.JPG&type=a340'
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA2MTlfMjUx%2FMDAxNjI0MDcwMDQ2NDE0.bQqjuSquWZRxFSaiU6fNy0y0yFHn00xskCxv2olrrOAg.wm74c7Cp_PQD0pJ5vYUWaGbzczPoqsUjsAgU2isaHkkg.JPEG.s2lette%2FIMG_6753.JPG&type=a340'
    },
 { name: '아몬드 쿠키', 
  type: '쿠키', 
@@ -350,7 +248,7 @@
  calorie: 80, 
  sugar: 19, 
  location: '실버정과자상점', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20110223_43%2Fpoohrang_kr_1298461266117TUTDn_JPEG%2FIMG_7784.JPG&type=a340' 
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20110223_43%2Fpoohrang_kr_1298461266117TUTDn_JPEG%2FIMG_7784.JPG&type=a340' 
    },
 { name: '말차 초코 쿠키', 
  type: '쿠키', 
@@ -358,7 +256,7 @@
  calorie: 199, 
  sugar: 11, 
  location: '혜123', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fshop1.phinf.naver.net%2F20240118_14%2F1705544883383LF0Qw_JPEG%2F106680782076344536_132649983.jpg&type=a340'
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fshop1.phinf.naver.net%2F20240118_14%2F1705544883383LF0Qw_JPEG%2F106680782076344536_132649983.jpg&type=a340'
    },
  { name: '녹차 도넛', 
   type: '도넛', 
@@ -382,7 +280,7 @@
  calorie: 298, 
  sugar: 7, 
  location: '혜웡케이키', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA3MzBfMjg3%2FMDAxNjkwNzA4MzQ3NDMz.VfE1s7zoMmSZYvnXXG_IhetqjujUnY4bDOXUxG4wI8Ug.AI3fp-q842Cq2pZGB3E36nKq053PtQxcHueyGwjVcOIg.JPEG.mii0919mii%2Foutput_1668576190.jpg&type=a340'
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA3MzBfMjg3%2FMDAxNjkwNzA4MzQ3NDMz.VfE1s7zoMmSZYvnXXG_IhetqjujUnY4bDOXUxG4wI8Ug.AI3fp-q842Cq2pZGB3E36nKq053PtQxcHueyGwjVcOIg.JPEG.mii0919mii%2Foutput_1668576190.jpg&type=a340'
    },
 { name: '고구마 케이크',
  type: '케이크', 
@@ -390,7 +288,7 @@
  calorie: 79, 
  sugar: 5, 
  location: '혜웡케이키', 
- image: ‘https://search.pstatic.net/sunny/?src=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcrGvnv%2FbtrYyemOARD%2FKL7VxueIHuGuYgGPHsV3o1%2Fimg.jpg&type=a340'
+ image: 'https://search.pstatic.net/sunny/?src=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcrGvnv%2FbtrYyemOARD%2FKL7VxueIHuGuYgGPHsV3o1%2Fimg.jpg&type=a340'
    },
 { name: '말차 케이크', 
  type: '케이크', 
@@ -398,7 +296,7 @@
  calorie: 66, 
  sugar: 12, 
  location: '예지니케잌',
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxOTAzMDNfMjQ0%2FMDAxNTUxNjE0NjU0MDIy.zdf4uJOzIj-v95iM92pcUXCGCQCTcQLMliU-I9dyFisg.91rpKzc5PS2mzrLBkut9Wb2Ay37Be_u1vu5u4U2H4Swg.JPEG.4glee%2FIMG_6431.JPG&type=a340'
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxOTAzMDNfMjQ0%2FMDAxNTUxNjE0NjU0MDIy.zdf4uJOzIj-v95iM92pcUXCGCQCTcQLMliU-I9dyFisg.91rpKzc5PS2mzrLBkut9Wb2Ay37Be_u1vu5u4U2H4Swg.JPEG.4glee%2FIMG_6431.JPG&type=a340'
    },
 { name: '저당 바스크 치즈케이크', 
  type: '케이크', 
@@ -414,7 +312,7 @@
  calorie: 111, 
  sugar: 3, 
  location: '찐찐네', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMDA3MDFfNyAg%2FMDAxNTkzNTk4NzM1NzQ3.QUQfKwv1jfaHXML5q152gHKO8GvrlNLiId8UK7VooMEg.ryO37ln9BBsHt3MNHR_znDZq-IoBFOwA_xIfeqtmT6Mg.JPEG.xorudqlfeld%2Foutput_4134071299.jpg&type=a340' 
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMDA3MDFfNyAg%2FMDAxNTkzNTk4NzM1NzQ3.QUQfKwv1jfaHXML5q152gHKO8GvrlNLiId8UK7VooMEg.ryO37ln9BBsHt3MNHR_znDZq-IoBFOwA_xIfeqtmT6Mg.JPEG.xorudqlfeld%2Foutput_4134071299.jpg&type=a340' 
    },
 { name: '저당 로투스 케이크', 
  type: '케이크', 
@@ -422,7 +320,7 @@
  calorie: 244, 
  sugar: 19, 
  location: '찐찐네', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2FMjAxOTAzMThfMTg4%2FMDAxNTUyOTAxNTEyOTUx.duU8Z-dE7YaLmgodW1XU39jZBEeeTz8-nF4xzHPsFAQg.4m9JNyzMH8WeelmyeLUJ2novJpmFNzXU--LNBSijH9Mg.JPEG.kaslwl9%2FexternalFile.jpg&type=a340'
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2FMjAxOTAzMThfMTg4%2FMDAxNTUyOTAxNTEyOTUx.duU8Z-dE7YaLmgodW1XU39jZBEeeTz8-nF4xzHPsFAQg.4m9JNyzMH8WeelmyeLUJ2novJpmFNzXU--LNBSijH9Mg.JPEG.kaslwl9%2FexternalFile.jpg&type=a340'
    },
 { name: '저당 황치즈 케이크', 
  type: '케이크', 
@@ -430,71 +328,34 @@
  calorie: 98, 
  sugar: 14, 
  location: '케키맛집', 
- image: ‘https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MDZfMjA0%2FMDAxNzE0OTU5NTc2MzE5.beXToJQ7UcucjfchKsQ91CGWx0BF0GyD1FXBczw40xwg.gFfCVJW1SfhWN-1-86MUVKCglX0FMuiiAH0cpuh__gMg.JPEG%2FIMG_2455.JPG&type=a340'
-   },
-<div id="newsPage">
-    <h2>디저트 뉴스</h2>
-    <div id="newsContainer"></div>
+ image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MDZfMjA0%2FMDAxNzE0OTU5NTc2MzE5.beXToJQ7UcucjfchKsQ91CGWx0BF0GyD1FXBczw40xwg.gFfCVJW1SfhWN-1-86MUVKCglX0FMuiiAH0cpuh__gMg.JPEG%2FIMG_2455.JPG&type=a340'
+   }
+    ];
+     <div id="news" class="hidden">
+      <h1>디저트 뉴스</h1>
+
+      <div class="news-item">
+        <h2>신상 마카롱 출시!</h2>
+        <p>달콤한 신상 마카롱이 출시되었습니다. 다양한 맛을 즐겨보세요.</p>
+        <small>2025-05-28</small>
+      </div>
+
+      <div class="news-item">
+        <h2>여름 한정 아이스크림 이벤트</h2>
+        <p>여름을 맞아 한정 아이스크림 이벤트를 진행합니다. 시원한 디저트를 만나보세요.</p>
+        <small>2025-05-27</small>
+      </div>
+    </div>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      showPage('recommendationPage');
-      loadDessertNews();
-    });
-
-    function showPage(pageId) {
-      const pages = ['recommendationPage', 'diaryPage', 'newsPage'];
-      pages.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-      });
-      const target = document.getElementById(pageId);
-      if (target) target.style.display = 'block';
-    }
-
-    function loadDessertNews() {
-      const news = [
-        {
-          title: "마카롱 신상 출시!",
-          summary: "달콤한 꿀마카롱에서 무화과&레몬 신제품 출시",
-          image: "https://source.unsplash.com/featured/?macaron",
-          link: "https://dessertnews.com/news/fig-lemon-macaron"
-        },
-        {
-          title: "비건 디저트 열풍",
-          summary: "건강을 생각하는 소비자들 사이에서 비건 디저트가 인기",
-          image: "https://source.unsplash.com/featured/?vegan-dessert",
-          link: "https://dessertnews.com/news/vegan-trend"
-        },
-        {
-          title: "서울 도넛 페스티벌 개최",
-          summary: "다양한 수제 도넛 브랜드가 한자리에!",
-          image: "https://source.unsplash.com/featured/?donut",
-          link: "https://dessertnews.com/news/seoul-donut-festival"
-        },
-        {
-          title: "글루텐프리 베이커리 확산",
-          summary: "알레르기 걱정 없이 즐길 수 있는 디저트 인기 급증",
-          image: "https://source.unsplash.com/featured/?gluten-free-dessert",
-          link: "https://dessertnews.com/news/glutenfree-expansion"
-        }
-      ];
-
-      const container = document.getElementById('newsContainer');
-      container.innerHTML = '';
-
-      news.forEach(item => {
-        container.innerHTML += `
-          <div class="news-item">
-            <img src="${item.image}" alt="${item.title}">
-            <h3>${item.title}</h3>
-            <p>${item.summary}</p>
-            <a href="${item.link}" target="_blank">자세히 보기</a>
-          </div>
-        `;
-      });
+    function showPage(page) {
+      document.getElementById('home').classList.add('hidden');
+      document.getElementById('news').classList.add('hidden');
+      document.getElementById(page).classList.remove('hidden');
     }
   </script>
+
 </body>
 </html>
+
