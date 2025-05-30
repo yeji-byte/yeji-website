@@ -93,24 +93,8 @@
   
    <div id="newsPage">
     <h2>다양한 디저트 소식을 한눈에!</h2>
-    <p></p>
-    <div class="news-container">
-      <div class="news-card">
-        <img src="https://cdn.imweb.me/upload/S20220503731b0c0f96068/2aa143ef38303.jpg" alt="신상 마카롱">
-        <h4>[새 출시] 무지개 마카롱</h4>
-        <p>컬러풀한 비주얼과 다양한 맛으로 SNS 인기 폭발!</p>
-      </div>
-      <div class="news-card">
-        <img src="https://image.ohou.se/i/bucketplace-v2-development/uploads/cards/projects/166799632540277368.jpeg" alt="로컬 디저트 카페">
-        <h4>[이슈] 부산 로컬 디저트 카페 열풍</h4>
-        <p>지역 기반의 디저트 맛집이 주목받고 있어요.</p>
-      </div>
-      <div class="news-card">
-        <img src="https://img-cf.kurly.com/shop/data/goods/1656644979364l0.jpg" alt="비건 디저트">
-        <h4>[트렌드] 비건 디저트 시장 확대</h4>
-        <p>건강과 환경을 생각한 비건 디저트 인기 상승 중.</p>
-      </div>
-    </div>
+    <div class="news-container" id="newsContainer"></div>
+      
   </div> 
   <script>
     let chart;
@@ -448,16 +432,49 @@
           }
         });
       }
+ 
+if (pageId === 'newsPage') {
+        loadNews();
+      }
     }
 
-    function parseRange(rangeStr) {
-      const [min, max] = rangeStr.split('-').map(Number);
-      return { min, max };
-    }
+    function loadNews() {
+      const news = [
+        {
+          title: "[새 출시] 무지개 마카롱",
+          desc: "컬러풀한 비주얼과 다양한 맛으로 SNS 인기 폭발!",
+          image: "https://cdn.imweb.me/upload/S20220503731b0c0f96068/2aa143ef38303.jpg"
+        },
+        {
+          title: "[이슈] 부산 로컬 디저트 카페 열풍",
+          desc: "지역 기반의 디저트 맛집이 주목받고 있어요.",
+          image: "https://image.ohou.se/i/bucketplace-v2-development/uploads/cards/projects/166799632540277368.jpeg"
+        },
+        {
+          title: "[트렌드] 비건 디저트 시장 확대",
+          desc: "건강과 환경을 생각한 비건 디저트 인기 상승 중.",
+          image: "https://img-cf.kurly.com/shop/data/goods/1656644979364l0.jpg"
+        }
+       ];
 
+      const container = document.getElementById('newsContainer');
+      container.innerHTML = '';
+
+      news.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.innerHTML = `
+          <img src="${item.image}" alt="${item.title}">
+          <h4>${item.title}</h4>
+          <p>${item.desc}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+    
     function searchDesserts() {
       const dessert = document.querySelector('input[name="dessert"]:checked')?.value;
-      const options = [...document.querySelectorAll('input[name="option"]:checked')].map(cb => cb.value);
+      const option = document.querySelector('input[name="option"]:checked')?.value;
       const calorieRange = parseRange(document.getElementById('calorieRange').value);
       const sugarRange = parseRange(document.getElementById('sugarRange').value);
 
@@ -466,7 +483,7 @@
       const filtered = dessertDB.filter(item => {
         return (
           (!dessert || item.type === dessert) &&
-          options.every(opt => item.options.includes(opt)) &&
+          (!option || item.options.includes(option)) &&
           item.calorie >= calorieRange.min && item.calorie <= calorieRange.max &&
           item.sugar >= sugarRange.min && item.sugar <= sugarRange.max
         );
