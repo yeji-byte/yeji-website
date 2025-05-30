@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,10 +11,10 @@
     .section { margin-bottom: 40px; }
     .graph-container { width: 600px; height: 400px; margin: auto; }
     button { padding: 10px 20px; font-size: 16px; margin: 10px; cursor: pointer; }
-    #recommendationPage, #diaryPage { display: none; }
-    #dessertImage, .result-image { max-width: 300px; margin-top: 20px; }
-    
-     .news-container {
+    #recommendationPage, #diaryPage, #newsPage { display: none; }
+    .result-image { max-width: 300px; margin-top: 20px; }
+
+    .news-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -39,7 +40,7 @@
   </style>
 </head>
 <body>
-  <h1>Sweetfit - 당신만을 위한 디저트 </h1>
+  <h1>Sweetfit - 당신만을 위한 디저트</h1>
   <button onclick="showPage('recommendationPage')">맞춤형 디저트 추천받기</button>
   <button onclick="showPage('diaryPage')">나만의 디저트 일기</button>
   <button onclick="showPage('newsPage')">오늘의 디저트 뉴스</button>
@@ -51,16 +52,14 @@
       <label><input type="radio" name="dessert" value="케이크"> 케이크</label>
       <label><input type="radio" name="dessert" value="도넛"> 도넛</label>
       <label><input type="radio" name="dessert" value="쿠키"> 쿠키</label>
- 
     </div>
 
     <div class="section">
       <h3>옵션</h3>
-     <label><input type="radio" name="option" value="비건"> 비건</label>
+      <label><input type="radio" name="option" value="비건"> 비건</label>
       <label><input type="radio" name="option" value="저당"> 저당</label>
       <label><input type="radio" name="option" value="글루텐프리"> 글루텐프리</label>
     </div>
-
 
     <div class="section">
       <h3>칼로리 / 당</h3>
@@ -79,27 +78,24 @@
 
   <div id="diaryPage">
     <h2>나만의 디저트 일기</h2>
-    <p>자유롭게 기록해보세요!</p>
-    <textarea id="diary" rows="5" cols="60" placeholder="예: 딸기 케이크크가 퐁신했음."></textarea><br><br>
+    <textarea id="diary" rows="5" cols="60" placeholder="예: 딸기 케이크가 퐁신했음."></textarea><br><br>
     <input type="file" id="imageUpload" accept="image/*"><br><br>
     <input type="number" id="calorieInput" placeholder="당 수치 입력 (g)"><br><br>
-    <button onclick="saveDiary()"> 저장</button>
-
+    <button onclick="saveDiary()">저장</button>
     <div class="section graph-container">
       <h3>내 몸은 내가 지킨당</h3>
       <canvas id="calorieChart"></canvas>
     </div>
   </div>
-  
-   <div id="newsPage">
+
+  <div id="newsPage">
     <h2>다양한 디저트 소식을 한눈에!</h2>
     <div class="news-container" id="newsContainer"></div>
-      
-  </div> 
+  </div>
+
   <script>
     let chart;
-
-    const dessertDB = [
+ const dessertDB = [
       {
         name: '저당 초코크림 도넛',
         type: '도넛',
@@ -398,12 +394,13 @@
  image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MDZfMjA0%2FMDAxNzE0OTU5NTc2MzE5.beXToJQ7UcucjfchKsQ91CGWx0BF0GyD1FXBczw40xwg.gFfCVJW1SfhWN-1-86MUVKCglX0FMuiiAH0cpuh__gMg.JPEG%2FIMG_2455.JPG&type=a340'
    }
     ];
-   
-
     function showPage(pageId) {
-      document.getElementById('recommendationPage').style.display = 'none';
-      document.getElementById('diaryPage').style.display = 'none';
+      const pages = ['recommendationPage', 'diaryPage', 'newsPage'];
+      pages.forEach(id => {
+        document.getElementById(id).style.display = 'none';
+      });
       document.getElementById(pageId).style.display = 'block';
+
       if (pageId === 'diaryPage' && !chart) {
         const ctx = document.getElementById('calorieChart').getContext('2d');
         chart = new Chart(ctx, {
@@ -412,10 +409,7 @@
             labels: ['섭취한 당', '남은 당'],
             datasets: [{
               data: [0, 25],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(200, 200, 200, 0.3)'
-              ],
+              backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(200, 200, 200, 0.3)'],
               borderColor: 'rgba(255, 255, 255, 1)',
               borderWidth: 1
             }]
@@ -432,8 +426,8 @@
           }
         });
       }
- 
-if (pageId === 'newsPage') {
+
+      if (pageId === 'newsPage') {
         loadNews();
       }
     }
@@ -455,7 +449,7 @@ if (pageId === 'newsPage') {
           desc: "건강과 환경을 생각한 비건 디저트 인기 상승 중.",
           image: "https://img-cf.kurly.com/shop/data/goods/1656644979364l0.jpg"
         }
-       ];
+      ];
 
       const container = document.getElementById('newsContainer');
       container.innerHTML = '';
@@ -471,7 +465,12 @@ if (pageId === 'newsPage') {
         container.appendChild(card);
       });
     }
-    
+
+    function parseRange(rangeStr) {
+      const [min, max] = rangeStr.split('-').map(Number);
+      return { min, max };
+    }
+
     function searchDesserts() {
       const dessert = document.querySelector('input[name="dessert"]:checked')?.value;
       const option = document.querySelector('input[name="option"]:checked')?.value;
