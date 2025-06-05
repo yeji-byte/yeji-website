@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sweetfit - 디저트 추천</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dongle&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
@@ -13,6 +13,7 @@
       color: #333;
       padding: 20px;
       text-align: center;
+      font-size: 24px;
     }
 
     h1 {
@@ -94,11 +95,19 @@
       width: 100px;
       height: 100px;
       vertical-align: top;
+      font-size: 16px;
     }
 
     th {
       background-color: #ffe4e1;
       color: #d63384;
+    }
+
+    small {
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+      color: #666;
     }
   </style>
 </head>
@@ -109,23 +118,19 @@
   <button onclick="showPage('newsPage')">오늘의 디저트 뉴스</button>
   <button onclick="showPage('calendarPage')">디저트 캘린더</button>
 
-  
   <div id="recommendationPage">
-    <h2>오늘은 어떤 디저트가 땡기시나요?</h2>
+    <h2>디저트 추천</h2>
     <div class="section">
-      <h3>종류</h3>
       <label><input type="radio" name="dessert" value="케이크"> 케이크</label>
       <label><input type="radio" name="dessert" value="도넛"> 도넛</label>
       <label><input type="radio" name="dessert" value="쿠키"> 쿠키</label>
     </div>
     <div class="section">
-      <h3>옵션</h3>
       <label><input type="radio" name="option" value="비건"> 비건</label>
       <label><input type="radio" name="option" value="저당"> 저당</label>
       <label><input type="radio" name="option" value="글루텐프리"> 글루텐프리</label>
     </div>
     <div class="section">
-      <h3>칼로리 / 당</h3>
       <select id="calorieRange">
         <option value="1-200">1~200</option>
         <option value="201-400">201~400</option>
@@ -142,198 +147,128 @@
 
 
   <div id="diaryPage">
-    <h2>나만의 디저트 일기</h2>
-    <textarea id="diary" rows="5" cols="60" placeholder="예: 딸기 케이크가 퐁신했음."></textarea><br><br>
-    <input type="file" id="imageUpload" accept="image/*"><br><br>
+    <h2>디저트 일기</h2>
+    <textarea id="diary" rows="5" cols="60" placeholder="예: 딸기 케이크가 퐁신했음!"></textarea><br><br>
     <input type="number" id="calorieInput" placeholder="당 수치 입력 (g)"><br><br>
     <button onclick="saveDiary()">저장</button>
     <div class="section graph-container">
-      <h3>내 몸은 내가 지킨당</h3>
       <canvas id="calorieChart"></canvas>
     </div>
   </div>
 
 
   <div id="newsPage">
-    <h2>오늘의 디저트 뉴스</h2>
+    <h2>디저트 뉴스</h2>
     <div class="news-container" id="newsContainer"></div>
   </div>
 
 
   <div id="calendarPage">
     <h2>디저트 캘린더</h2>
-    <p>내가 먹은 디저트를 한눈에 확인해보세요!</p>
     <div id="calendarContainer" style="margin-top: 30px;"></div>
   </div>
 
-  <script>
-    let chart;
+<script>
+  let chart;
 
-    function showPage(pageId) {
-      const pages = ['recommendationPage', 'diaryPage', 'newsPage', 'calendarPage'];
-      pages.forEach(id => {
-        document.getElementById(id).style.display = 'none';
-      });
-      document.getElementById(pageId).style.display = 'block';
+  function showPage(pageId) {
+    const pages = ['recommendationPage', 'diaryPage', 'newsPage', 'calendarPage'];
+    pages.forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+    document.getElementById(pageId).style.display = 'block';
 
-      if (pageId === 'calendarPage') {
-        renderCalendar();
-      }
+    if (pageId === 'calendarPage') renderCalendar();
+    if (pageId === 'newsPage') loadNews();
 
-      if (pageId === 'diaryPage' && !chart) {
-        const ctx = document.getElementById('calorieChart').getContext('2d');
-        chart = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            labels: ['섭취한 당', '남은 당'],
-            datasets: [{
-              data: [0, 25],
-              backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(200, 200, 200, 0.3)'],
-              borderColor: 'rgba(255, 255, 255, 1)',
-              borderWidth: 1
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { position: 'bottom' },
-              title: {
-                display: true,
-                text: '하루 권장 당 섭취량 (기준: 25g)'
-              }
+    if (pageId === 'diaryPage' && !chart) {
+      const ctx = document.getElementById('calorieChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['섭취한 당', '남은 당'],
+          datasets: [{
+            data: [0, 25],
+            backgroundColor: ['#ff69b4', '#ffe4e1']
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { position: 'bottom' },
+            title: {
+              display: true,
+              text: '하루 당 섭취량 (기준: 25g)'
             }
           }
-        });
-      }
-
-      if (pageId === 'newsPage') {
-        loadNews();
-      }
-    }
-
-    function renderCalendar() {
-      const diaryData = {
-        "2025-05-01": "딸기 케이크가 정말 부드러웠다.",
-        "2025-05-04": "비건 초코칩 쿠키 맛있었음. 재구매 의향 100%",
-        "2025-05-10": "레몬크림 도넛이 상큼했다.",
-        "2025-05-16": "디저트 일주일 끊기 챌린지 시작!",
-        "2025-05-23": "디저트 일주일 끊기 챌린지 성공!"
-        
-      };
-
-      const year = 2025;
-      const month = 5;
-      const firstDay = new Date(year, month - 1, 1).getDay();
-      const daysInMonth = new Date(year, month, 0).getDate();
-
-      let html = '<table><tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>';
-      let day = 1;
-
-      for (let i = 0; i < 6; i++) {
-        html += '<tr>';
-        for (let j = 0; j < 7; j++) {
-          if (i === 0 && j < firstDay) {
-            html += '<td></td>';
-          } else if (day > daysInMonth) {
-            html += '<td></td>';
-          } else {
-            const dateKey = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const note = diaryData[dateKey] || '';
-            html += `<td><strong>${day}</strong><br><small>${note}</small></td>`;
-            day++;
-          }
         }
-        html += '</tr>';
-      }
-      html += '</table>';
-      document.getElementById('calendarContainer').innerHTML = html;
-    }
-
-    function loadNews() {
-      const news = [
-        {
-          title: "[새 출시] 무지개 마카롱",
-          desc: "컬러풀한 비주얼과 다양한 맛으로 SNS 인기 폭발!",
-          image: "https://cdn.imweb.me/upload/S20220503731b0c0f96068/2aa143ef38303.jpg"
-        },
-        {
-          title: "[이슈] 부산 로컬 디저트 카페 열풍",
-          desc: "지역 기반의 디저트 맛집이 주목받고 있어요.",
-          image: "https://image.ohou.se/i/bucketplace-v2-development/uploads/cards/projects/166799632540277368.jpeg"
-        },
-        {
-          title: "[트렌드] 비건 디저트 시장 확대",
-          desc: "건강과 환경을 생각한 비건 디저트 인기 상승 중.",
-          image: "https://img-cf.kurly.com/shop/data/goods/1656644979364l0.jpg"
-        }
-      ];
-
-      const container = document.getElementById('newsContainer');
-      container.innerHTML = '';
-
-      news.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'news-card';
-        card.innerHTML = `
-          <img src="${item.image}" alt="${item.title}">
-          <h4>${item.title}</h4>
-          <p>${item.desc}</p>
-        `;
-        container.appendChild(card);
       });
     }
+  }
 
-    function parseRange(rangeStr) {
-      const [min, max] = rangeStr.split('-').map(Number);
-      return { min, max };
-    }
+  function renderCalendar() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const firstDay = new Date(year, month - 1, 1).getDay();
+    const daysInMonth = new Date(year, month, 0).getDate();
 
-    function searchDesserts() {
-      const dessert = document.querySelector('input[name="dessert"]:checked')?.value;
-      const option = document.querySelector('input[name="option"]:checked')?.value;
-      const calorieRange = parseRange(document.getElementById('calorieRange').value);
-      const sugarRange = parseRange(document.getElementById('sugarRange').value);
-      const resultDiv = document.getElementById('result');
+    let html = '<table><tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>';
+    let day = 1;
 
-      const filtered = dessertDB.filter(item => {
-        return (
-          (!dessert || item.type === dessert) &&
-          (!option || item.options.includes(option)) &&
-          item.calorie >= calorieRange.min &&
-          item.calorie <= calorieRange.max &&
-          item.sugar >= sugarRange.min &&
-          item.sugar <= sugarRange.max
-        );
-      });
-
-      if (filtered.length > 0) {
-        const result = filtered[0];
-        resultDiv.innerHTML = `
-          <h4>추천 디저트: ${result.name}</h4>
-          <p>위치: ${result.location}</p>
-          <p>칼로리: ${result.calorie} kcal / 당: ${result.sugar}g</p>
-          <img class="result-image" src="${result.image}" alt="${result.name}">
-        `;
-      } else {
-        resultDiv.innerHTML = "<p>조건에 맞는 디저트를 찾을 수 없습니다.</p>";
-      }
-    }
-
-    function saveDiary() {
-      const sugar = parseFloat(document.getElementById('calorieInput').value);
-      if (!isNaN(sugar)) {
-        const clamped = Math.min(Math.max(sugar, 0), 25);
-        if (chart) {
-          chart.data.datasets[0].data = [clamped, 25 - clamped];
-          chart.update();
+    for (let i = 0; i < 6; i++) {
+      html += '<tr>';
+      for (let j = 0; j < 7; j++) {
+        if (i === 0 && j < firstDay || day > daysInMonth) {
+          html += '<td></td>';
+        } else {
+          const dateKey = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const entry = localStorage.getItem(`diary-${dateKey}`);
+          const note = entry ? JSON.parse(entry).text : '';
+          html += `<td><strong>${day}</strong><small>${note}</small></td>`;
+          day++;
         }
       }
-      alert("기록이 저장되었습니다!");
+      html += '</tr>';
     }
 
+    html += '</table>';
+    document.getElementById('calendarContainer').innerHTML = html;
+  }
 
-    const dessertDB = [
-      {
+  function saveDiary() {
+    const text = document.getElementById('diary').value.trim();
+    const sugar = parseFloat(document.getElementById('calorieInput').value);
+
+    if (!text || isNaN(sugar)) {
+      alert('일기와 당 수치를 모두 입력해주세요.');
+      return;
+    }
+
+    const clamped = Math.min(Math.max(sugar, 0), 25);
+    const today = new Date();
+    const dateKey = today.toISOString().split('T')[0];
+
+    const entry = { text, sugar: clamped };
+    localStorage.setItem(`diary-${dateKey}`, JSON.stringify(entry));
+
+    if (chart) {
+      chart.data.datasets[0].data = [clamped, 25 - clamped];
+      chart.update();
+    }
+
+    alert('저장되었습니다!');
+    document.getElementById('diary').value = '';
+    document.getElementById('calorieInput').value = '';
+
+    showPage('calendarPage'); 
+  }
+
+  function parseRange(rangeStr) {
+    const [min, max] = rangeStr.split('-').map(Number);
+    return { min, max };
+  }
+
+  const dessertDB = [{
         name: '저당 초코크림 도넛',
         type: '도넛',
         options: ['저당'],
@@ -631,6 +566,68 @@
  image: 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA1MDZfMjA0%2FMDAxNzE0OTU5NTc2MzE5.beXToJQ7UcucjfchKsQ91CGWx0BF0GyD1FXBczw40xwg.gFfCVJW1SfhWN-1-86MUVKCglX0FMuiiAH0cpuh__gMg.JPEG%2FIMG_2455.JPG&type=a340'
    }
     ];
-  </script>
+   
+
+  function searchDesserts() {
+    const dessert = document.querySelector('input[name="dessert"]:checked')?.value;
+    const option = document.querySelector('input[name="option"]:checked')?.value;
+    const calorieRange = parseRange(document.getElementById('calorieRange').value);
+    const sugarRange = parseRange(document.getElementById('sugarRange').value);
+    const resultDiv = document.getElementById('result');
+
+    const filtered = dessertDB.filter(item => {
+      return (
+        (!dessert || item.type === dessert) &&
+        (!option || item.options.includes(option)) &&
+        item.calorie >= calorieRange.min &&
+        item.calorie <= calorieRange.max &&
+        item.sugar >= sugarRange.min &&
+        item.sugar <= sugarRange.max
+      );
+    });
+
+    if (filtered.length > 0) {
+      const result = filtered[0];
+      resultDiv.innerHTML = `
+        <h4>추천 디저트: ${result.name}</h4>
+        <p>위치: ${result.location}</p>
+        <p>칼로리: ${result.calorie} kcal / 당: ${result.sugar}g</p>
+        <img class="result-image" src="${result.image}" alt="${result.name}">
+      `;
+    } else {
+      resultDiv.innerHTML = "<p>조건에 맞는 디저트를 찾을 수 없습니다.</p>";
+    }
+  }
+
+  function loadNews() {
+    const news = [
+      {
+        title: "GS25, 스키니피그 신상 단독 판매...저당 디저트 확대",
+        desc: "당·칼로리 낮춘 간식 라인업 강화...4년새 매출 1.5배 증가",
+        image: "https://cdn.pointdaily.co.kr/news/photo/202401/187473_175959_278.jpg"
+      },
+      {
+        title: "트렌디한 한 끼 식사... 디저트 카페 창업전략은?",
+        desc: "설탕 대체재나 저칼로리 재료를 사용한 건강한 디저트가 인기! 비건, 글루텐 프리 옵션도 많이 선호",
+        image: "https://cdn.woman.chosun.com/news/photo/202410/118396_134706_2024.jpg"
+      }
+    ];
+
+    const container = document.getElementById('newsContainer');
+    container.innerHTML = '';
+    news.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'news-card';
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.title}">
+        <h4>${item.title}</h4>
+        <p>${item.desc}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+
+</script>
 </body>
 </html>
